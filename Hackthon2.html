@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Activity Tracker</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: linear-gradient(to right, #667eea, #764ba2);
+            margin: 0;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: auto;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .card {
+            background: white;
+            color: black;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .completed {
+            background: #d4edda;
+        }
+
+        button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #667eea;
+            color: white;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background: #ddd;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: limegreen;
+            width: 0%;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+        #progressText {
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Smart Activity Tracker</h2>
+    <div id="taskContainer"></div>
+
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div id="progressText">0% Completed</div>
+</div>
+
+<script>
+    let tasks = [
+        { name: "Study", completed: false },
+        { name: "Exercise", completed: false },
+        { name: "Coding", completed: false },
+        { name: "Reading", completed: false }
+    ];
+
+    function renderTasks() {
+        let container = document.getElementById("taskContainer");
+        container.innerHTML = "";
+
+        tasks.forEach((task, index) => {
+            let card = document.createElement("div");
+            card.className = "card";
+
+            if (task.completed) {
+                card.classList.add("completed");
+            }
+
+            let title = document.createElement("span");
+            title.textContent = task.name;
+
+            let btn = document.createElement("button");
+            btn.textContent = task.completed ? "Done" : "Mark Done";
+
+            btn.onclick = () => {
+                tasks[index].completed = true;
+                renderTasks();
+            };
+
+            card.appendChild(title);
+            card.appendChild(btn);
+            container.appendChild(card);
+        });
+
+        updateProgress();
+    }
+
+    function updateProgress() {
+        let completed = tasks.filter(t => t.completed).length;
+        let total = tasks.length;
+        let percent = (completed / total) * 100;
+
+        document.getElementById("progressFill").style.width = percent + "%";
+        document.getElementById("progressText").textContent =
+            Math.round(percent) + "% Completed";
+    }
+
+    renderTasks();
+</script>
+
+</body>
+</html>
